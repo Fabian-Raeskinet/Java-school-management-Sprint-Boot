@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Gestion de classes</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+
+</head>
+<body>
+<div th:replace="~{fragments/debut :: navbar(opt1='general',opt2=#{classe.ajout},opt3=#{classe.recherche},opt4=#{classe.tous},lien2='nouvclasse',lien3='rechclasse',lien4='toutesclasses')}"></div>
+<div th:replace="~{fragments/debut :: langue}"></div>
+<div class="container">
+    <th:block th:switch="${mode}">
+        <div th:case="'nouvclasse'">
+            <form action="addclasse" method="post" class="form-horizontal">
+                <div class="form-group row">
+                    <label class="control-label col-md-3" th:text="#{classe.sigle}"></label>
+                    <div class="col-md-7">
+                        <input type="text" class="form-control" name="sigle"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="control-label col-md-3" th:text="#{classe.annee}"></label>
+                    <div class="col-md-7">
+                        <input type="text" class="form-control" name="annee"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="control-label col-md-3" th:text="#{classe.titulaire}"></label>
+                    <div class="col-md-7">
+                        <input type="text" class="form-control" name="titulaire"/>
+                    </div>
+                </div>
+                <div class="pull-right">
+                    <input type="submit" th:value="#{classe.creer}" class="btn btn-primary"/>
+                </div>
+            </form>
+
+        </div>
+        <div th:case="'affnouvclasse'">
+            <h2 th:text="#{classe.okcrea}"/>
+            <div class="form-group row">
+                <label class="control-label col-md-3" th:text="#{classe.id}"></label>
+                <div class="col-md-7">
+                    <p th:text="${maClasse.idClasse}"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="control-label col-md-3" th:text="#{classe.sigle}"></label>
+                <div class="col-md-7">
+                    <p th:text="${maClasse.sigle}"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="control-label col-md-3" th:text="#{classe.titulaire}"></label>
+                <div class="col-md-7">
+                    <p th:text="${maClasse.titulaire}"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="control-label col-md-3" th:text="#{classe.annee}"></label>
+                <div class="col-md-7">
+                    <p th:text="${maClasse.annee}"/>
+                </div>
+            </div>
+        </div>
+        <div th:case="'selection'">
+            <h1 th:text="#{classe.rechercheparid}"></h1>
+            <form action="recherche" method="post">
+                <label class="control-label col-md-3" th:text="#{classe.rechercheid}"></label>
+                <input type="text" name="numclasse"/>
+                <input type="submit" th:value="#{classe.search}" name="rechercher"/>
+            </form>
+        </div>
+
+        <div th:case="'modifclasse'">
+            <form action="modifclasse" method="post">
+                <div class="form-group row">
+                    <label class="control-label col-md-3" th:text="#{classe.id}"></label>
+                    <div class="col-md-7">
+                        <input type="text" th:value="${maClasse.idClasse}" class="form-control" name="idclasse" readonly="readonly"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="control-label col-md-3" th:text="#{classe.sigle}"></label>
+                    <div class="col-md-7">
+                        <input type="text" th:value="${maClasse.sigle}" class="form-control" name="sigle" readonly="readonly"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="control-label col-md-3" th:text="#{classe.titulaire}"></label>
+                    <div class="col-md-7">
+                        <input type="text" th:value="${maClasse.titulaire}" class="form-control" name="titulaire"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="control-label col-md-3" th:text="#{classe.annee}"></label>
+                    <div class="col-md-7">
+                        <input type="text" th:value="${maClasse.annee}" class="form-control" name="annee"/>
+                    </div>
+                </div>
+                <div class="form-group row" th:if="${maClasse.elevesByIdClasse.isEmpty()}">
+                    <input type="submit" name="Action" th:value="#{option.maj}" class="btn btn-primary"/>&nbsp;
+                    <input type="submit" name="Action" th:value="#{option.suppr}" class="btn btn-primary"/>
+                </div>
+                <div class="form-group row" th:unless="${maClasse.elevesByIdClasse.isEmpty()}">
+                    <input type="submit" name="Action" th:value="#{option.maj}" class="btn btn-primary"/>&nbsp;
+                    <input type="submit" name="Action" th:value="#{option.suppr}" class="btn btn-primary" disabled="disabled"/>
+                </div>
+
+            </form>
+            <div th:if="${maClasse.elevesByIdClasse.isEmpty()}">
+                <p th:text="#{el.pastrouve}"/>
+            </div>
+            <div th:unless="${maClasse.elevesByIdClasse.isEmpty()}">
+                <table class="table table-striped">
+                    <caption th:text="#{el.titre}"></caption>
+                    <thead>
+                    <th><label class="control-label" th:text="#{el.matricule}"></label></th>
+                    <th><label class="control-label" th:text="#{el.nom}"></label></th>
+                    <th><label class="control-label" th:text="#{el.prenom}"></label></th>
+                    <th><label class="control-label" th:text="#{el.tel}"></label></th>
+                    <th><label class="control-label" th:text="#{el.date}"></label></th>
+                    </thead>
+                    <tbody>
+                    <tr th:each="unEleve : ${maClasse.elevesByIdClasse}">
+                        <td th:text="${unEleve.matricule}"/>
+                        <td th:text="${unEleve.nom}"/>
+                        <td th:text="${unEleve.prenom}"/>
+                        <td th:text="${unEleve.tel}"/>
+                        <td th:text="${unEleve.dateNaissance}"/>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div th:case="'classestrouvees'">
+            <div th:if="${mesClasses.isEmpty()}">
+                <p th:text="#{classe.vide}"/>
+            </div>
+            <div th:unless="${mesClasses.isEmpty()}">
+                <form th:action="recherche" method="post">
+                    <table class="table table-striped">
+                        <caption th:text="#{classe.existe}"/>
+                        <th th:text="#{classe.choix}">
+                        <th th:text="#{classe.sigle}">
+                        <th th:text="#{classe.annee}">
+                        <th th:text="#{classe.titulaire}">
+                            <tr th:each="uneClasse : ${mesClasses}">
+                                <td>
+                                    <input type="radio" name="numclasse" th:value="${uneClasse.idClasse}" checked="checked">
+                                </td>
+                                <td th:text="${uneClasse.sigle}"/>
+                                <td th:text="${uneClasse.annee}"/>
+                                <td th:text="${uneClasse.titulaire}"/>
+                            </tr>
+                    </table>
+                    <input type="submit" name="ok" value="ok" class="btn btn-primary"/>
+                </form>
+            </div>
+        </div>
+        <div th:case="'erreur'">
+            <p th:text="#{gestion.erreur}"/>
+            <div th:text="${erreur}"/>
+            <a href="#" onclick="history.go(-1)" th:text="#{gestion.back}"/>
+        </div>
+    </th:block>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</body>
+</html>

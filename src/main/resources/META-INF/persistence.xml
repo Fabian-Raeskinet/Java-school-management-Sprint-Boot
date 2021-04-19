@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
+    <persistence-unit name="projetUnit" transaction-type="RESOURCE_LOCAL">
+        <class>entities.ClasseEntity</class>
+        <class>entities.EleveEntity</class>
+        <properties>
+            <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+            <property name="javax.persistence.jdbc.url"
+                      value="jdbc:postgresql://ec2-50-17-197-184.compute-1.amazonaws.com:5432/da3ce2s375ig5"/>
+            <property name="javax.persistence.jdbc.user" value="ulnqaemkjokzpm"/>
+            <property name="javax.persistence.jdbc.password"
+                      value="a90f2ee9b1c48ce99390820cfdd90332e9b226fc3827e0bba30a3dd7578072cb"/>
+        </properties>
+    </persistence-unit>
+</persistence>
